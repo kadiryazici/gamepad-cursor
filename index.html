@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + TS</title>
+
+    <style>
+      * {
+        box-sizing: border-box;
+        scrollbar-width: none;
+      }
+
+      ::-webkit-scrollbar {
+        display: none;
+      }
+      html {
+        height: 150vh;
+        width: 150vw;
+      }
+
+      .scroll-container {
+        width: 300px;
+        height: 300px;
+        background-color: purple;
+        overflow: auto;
+        padding: 20px
+      }
+
+      .scroll-container.bigger {
+        width: 500px;
+        height: 500px
+      }
+
+      .scroll-inner {
+        width: 700px;
+        height: 700px;
+        background-image: radial-gradient(black, transparent);
+        background-size: 40px 40px;
+      }
+    </style>
+  </head>
+  <body>
+    <a href="https://google.com" style="font-size: 50px" target="_blank">Google'a git</a>
+    
+    <br />
+    <br />
+
+    <div class="scroll-container">
+      <div class="scroll-container bigger">
+        <div class="scroll-inner"></div>
+      </div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
