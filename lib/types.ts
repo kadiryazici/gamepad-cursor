@@ -24,6 +24,8 @@ export type Hook = (context: HookContext) => void
 
 export interface Context {
   active: boolean
+  invisible: boolean
+  lastInvisible: boolean
   cursor: HTMLElement
   buttonMap: ButtonMap
   triggerMap: TriggerMap
@@ -43,6 +45,8 @@ export interface PresetContext {
   getCursorRect(): DOMRect
   onUpdate(hook: Hook): void
   onCursorMove(hook: Hook): void
+  setInvisible(visible: boolean): void
+  getInvisible(): boolean
 }
 
 export type Preset = (context: PresetContext) => void

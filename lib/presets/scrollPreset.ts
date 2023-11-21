@@ -4,12 +4,11 @@ import type { Preset } from '../types'
 export const scrollPreset = ({
   speed = 1000,
   threshold = 0.35,
-} = {}): Preset => ({
-  getCursorRect,
-  onUpdate,
-}) => {
-  onUpdate(({ getAxisValue, getDelta }) => {
-    const rect = getCursorRect()
+} = {}): Preset => (ctx) => {
+  let scrolling = false
+
+  ctx.onUpdate(({ getAxisValue, getDelta }) => {
+    const rect = ctx.getCursorRect()
     const el = document.elementFromPoint(rect.x, rect.y)
     if (el) {
       let xVelocity = getAxisValue(Axis.RightX)
@@ -25,8 +24,15 @@ export const scrollPreset = ({
       else
         yVelocity = yVelocity * speed * getDelta()
 
-      if (xVelocity === 0 && yVelocity === 0)
+      if (xVelocity === 0 && yVelocity === 0) {
+        scrolling = false
         return
+      }
+
+      if (!scrolling)
+        ctx.setInvisible(false)
+
+      scrolling = true
 
       let currentEl = el as HTMLElement | null
 

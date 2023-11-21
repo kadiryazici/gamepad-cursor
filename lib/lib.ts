@@ -21,9 +21,17 @@ function handleTick(ctx: Context) {
   if (!ctx.active)
     return
 
+  if (ctx.lastInvisible !== ctx.invisible) {
+    ctx.cursor.style.visibility = ctx.invisible ? 'hidden' : 'visible'
+    ctx.lastInvisible = ctx.invisible
+  }
+
   const gamepads = navigator.getGamepads()
 
   ctx.buttonMap.forEach((state) => {
+    if (state.justPressed)
+      ctx.presetContext.setInvisible(false)
+
     state.justPressed = false
   })
 
@@ -107,6 +115,11 @@ export function createGamepadPointer({
     onCursorMove: (hook) => {
       ctx.cursorMoveHooks.add(hook)
     },
+    setInvisible(value) {
+      ctx.lastInvisible = ctx.invisible
+      ctx.invisible = value
+    },
+    getInvisible: () => ctx.invisible,
   }
 
   const hookContext: HookContext = {
@@ -130,6 +143,8 @@ export function createGamepadPointer({
     axisMap,
     buttonMap,
     triggerMap,
+    invisible: false,
+    lastInvisible: false,
     cursor,
     delta: 0,
     animFrameId: -1,
@@ -214,6 +229,15 @@ export function createGamepadPointer({
 
     if (ctx.gamepadIndexes.length === 0)
       stopUpdate()
+  })
+
+  window.addEventListener('mousemove', (e) => {
+    if (e.buttons !== 999)
+      ctx.invisible = true
+  })
+
+  window.addEventListener('keydown', () => {
+    ctx.invisible = true
   })
 }
 
