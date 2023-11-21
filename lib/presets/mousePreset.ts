@@ -2,11 +2,14 @@ import { Axis, Button, Trigger } from '../constants'
 import type { Preset } from '../types'
 
 export const mousePreset = (speed: number): Preset => (ctx) => {
+  let hoveredElementsSet = new Set<Element>()
+
   ctx.onCursorMove(({ getTriggerValue }) => {
     ctx.setInvisible(false)
 
     const rect = ctx.getCursorRect()
     const el = document.elementFromPoint(rect.x, rect.y)
+
     if (el) {
       const ctrlPressed = getTriggerValue(Trigger.RT) >= 0.05
 
@@ -22,6 +25,35 @@ export const mousePreset = (speed: number): Preset => (ctx) => {
         ctrlKey: ctrlPressed,
       }))
     }
+
+    const hoveredElements = document.elementsFromPoint(rect.x, rect.y)
+    const leftElements = [...hoveredElementsSet].filter(el => !hoveredElements.includes(el))
+    const addedElements = hoveredElements.filter(el => !hoveredElementsSet.has(el))
+
+    for (const element of addedElements) {
+      element.dispatchEvent(new MouseEvent('mouseenter', {
+        bubbles: false,
+        button: 0,
+        buttons: 999,
+        clientX: rect.x,
+        clientY: rect.y,
+        screenX: rect.x,
+        screenY: rect.y,
+      }))
+    }
+
+    for (const element of leftElements) {
+      element.dispatchEvent(new MouseEvent('mouseleave', {
+        bubbles: false,
+        button: 0,
+        buttons: 999,
+        clientX: rect.x,
+        clientY: rect.y,
+        screenX: rect.x,
+        screenY: rect.y,
+      }))
+    }
+    hoveredElementsSet = new Set(hoveredElements)
   })
 
   ctx.onUpdate(({

@@ -30,3 +30,9 @@ createGamepadPointer({
   ],
 })
 
+const scrollContainer = document.querySelector('.scroll-container') as HTMLElement
+
+scrollContainer.addEventListener('mouseenter', () => console.log('mouseentered'))
+scrollContainer.addEventListener('mouseleave', () => console.log('mouseleave'))
+
+window.addEventListener('click', () => console.log('HEllo'))
