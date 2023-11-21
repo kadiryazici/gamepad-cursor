@@ -14,6 +14,7 @@ export const Button = Object.freeze({
   Left: 14,
   Right: 15,
   Home: 16,
+  Share: 17,
 })
 
 export const Trigger = Object.freeze({
